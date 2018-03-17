@@ -48,20 +48,6 @@ public class ItemParserTest {
         itemParser.parseStringIntoItem(rawBrokenSingleItem);
     }
 
-    @Test
-    public void findKeyValuePairsInRawItemDataTest(){
-        Integer expected = 4;
-        Integer actual = itemParser.findKeyValuePairsInRawItemData(rawSingleItem).size();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void findKeyValuePairsInRawItemDataTestIrregular(){
-        Integer expected = 4;
-        String normalized = itemParser.normalizeRawData(rawSingleItemIrregularSeperatorSample);
-        Integer actual = itemParser.findKeyValuePairsInRawItemData(normalized).size();
-        assertEquals(expected, actual);
-    }
 
     @Test
     public void testNormalizeRawData(){
