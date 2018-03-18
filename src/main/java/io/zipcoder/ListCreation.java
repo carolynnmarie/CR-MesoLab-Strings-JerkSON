@@ -6,40 +6,24 @@ import java.util.regex.Pattern;
 
 public class ListCreation {
 
-    private ListEntryPair entry;
-    private ArrayList<ListEntryPair> groceryList;
     private ItemParser parser;
 
     public ListCreation() {
-        this.entry = new ListEntryPair("", 0.00);
-        this.groceryList = new ArrayList<>();
         this.parser = new ItemParser();
     }
 
     public String rawStringToFinishedGroceryList(String raw) throws Exception {
         ArrayList<String> rawItems = parser.parseRawDataIntoStringArray(raw);
-        ArrayList<Item> itemArray = parser.stringArrayToItemArray(rawItems);
-        ArrayList<ListEntryPair> groceryListArray = createNameAndPriceList(itemArray);
-        String finish = formattedGroceryListString(groceryListArray);
-        return finish;
+        ArrayList<Item> groceryList = parser.stringArrayToItemArray(rawItems);
+        return formattedGroceryListString(groceryList);
     }
 
-    public ArrayList<ListEntryPair> createNameAndPriceList(ArrayList<Item> itemObjects) {
-        for (Item item : itemObjects) {
-            String name = item.getName();
-            Double price = item.getPrice();
-            entry = new ListEntryPair(name, price);
-            groceryList.add(entry);
-        }
-        return groceryList;
-    }
-
-    public String formattedGroceryListString(ArrayList<ListEntryPair> groceryList) {
+    public String formattedGroceryListString(ArrayList<Item> groceryList) {
         LinkedHashMap<Double,Integer> priceOccur = new LinkedHashMap<>();
         String list = "";
         for (String key : keySet(groceryList)) {
             Pattern p = Pattern.compile(key);
-            Matcher matcher = p.matcher(keyAndValueString(groceryList));
+            Matcher matcher = p.matcher(keyString(groceryList));
             int x = 0;
             while (matcher.find()) {
                 x++;
@@ -55,39 +39,35 @@ public class ListCreation {
             }
         }
         int errors = parser.getExceptionCounter();
-        if(errors == 1){
-            list += String.format("Errors              seen: %d time",errors);
-        }else {
-            list += String.format("Errors              seen: %d times",errors);
-        }
+        list += String.format("Errors              seen: %d times",errors);
         list = namesToCaps(list);
         return list;
     }
 
-    private LinkedHashSet<String> keySet(ArrayList<ListEntryPair> groceryList) {
+    public LinkedHashSet<String> keySet(ArrayList<Item> groceryList) {
         LinkedHashSet<String> keys = new LinkedHashSet<>();
-        for (ListEntryPair pair : groceryList) {
-            keys.add(pair.getName());
+        for (Item item : groceryList) {
+            keys.add(item.getName());
         }
         return keys;
     }
 
-    private String keyAndValueString(ArrayList<ListEntryPair> groceryList) {
-        String keysAndValues = "";
-        for (ListEntryPair pair : groceryList) {
-            keysAndValues += pair.pairToString();
+    public String keyString(ArrayList<Item> groceryList) {
+        String keys = "";
+        for (Item item : groceryList) {
+            keys += item.getName();
         }
-        return keysAndValues;
+        return keys;
     }
 
-    private LinkedHashMap<Double, Integer> valueCount(ArrayList<ListEntryPair> groceryList,String key) {
+    public LinkedHashMap<Double, Integer> valueCount(ArrayList<Item> groceryList,String key) {
         LinkedHashMap<Double, Integer> priceOccurrences = new LinkedHashMap<>();
-        for (ListEntryPair pair : groceryList) {
-            Double price = pair.getPrice();
-            if (key.equals(pair.getName())) {
-                if (!priceOccurrences.containsKey(pair.getPrice())) {
+        for (Item item : groceryList) {
+            Double price = item.getPrice();
+            if (key.equals(item.getName())) {
+                if (!priceOccurrences.containsKey(item.getPrice())) {
                     priceOccurrences.put(price, 1);
-                } else if (priceOccurrences.containsKey(pair.getPrice())) {
+                } else if (priceOccurrences.containsKey(item.getPrice())) {
                     priceOccurrences.replace(price, (priceOccurrences.get(price) + 1));
                 }
             }

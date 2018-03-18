@@ -94,7 +94,7 @@ public class ItemParser {
         Pattern pattern = Pattern.compile("A");
         Matcher matcher = pattern.matcher(rawData);
         String lower = matcher.replaceAll("a");
-        for(int i = 0; i<upperCase.size(); i++){
+        for(int i = 1; i<upperCase.size(); i++){
             matcher.reset(lower);
             matcher.usePattern(Pattern.compile(upperCase.get(i)));
             lower = matcher.replaceAll(lowerCase.get(i));
