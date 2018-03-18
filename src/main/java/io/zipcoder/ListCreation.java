@@ -19,7 +19,7 @@ public class ListCreation {
     }
 
     public String formattedGroceryListString(ArrayList<Item> groceryList) {
-        LinkedHashMap<Double,Integer> priceOccur = new LinkedHashMap<>();
+        TreeMap<Double,Integer> priceOccur = new TreeMap<>();
         String list = "";
         for (String key : keySet(groceryList)) {
             Pattern p = Pattern.compile(key);
@@ -60,8 +60,8 @@ public class ListCreation {
         return keys;
     }
 
-    public LinkedHashMap<Double, Integer> valueCount(ArrayList<Item> groceryList,String key) {
-        LinkedHashMap<Double, Integer> priceOccurrences = new LinkedHashMap<>();
+    public TreeMap<Double, Integer> valueCount(ArrayList<Item> groceryList,String key) {
+        TreeMap<Double, Integer> priceOccurrences = new TreeMap<>();
         for (Item item : groceryList) {
             Double price = item.getPrice();
             if (key.equals(item.getName())) {
@@ -75,16 +75,20 @@ public class ListCreation {
         return priceOccurrences;
     }
 
-    private String printValues(LinkedHashMap<Double, Integer> priceOccurrences) {
+    private String printValues(TreeMap<Double, Integer> priceOccurrences) {
         String valuesAndOccurrences = "";
-        for (Map.Entry<Double, Integer> entry : priceOccurrences.entrySet()) {
+
+        for (Map.Entry<Double, Integer> entry : priceOccurrences.descendingMap().entrySet()) {
             if(entry.getValue().equals(1)) {
                 valuesAndOccurrences += String.format("Price:   %1$.2f       seen: %2$d time \n", entry.getKey(), entry.getValue());
             } else {
                 valuesAndOccurrences += String.format("Price:   %1$.2f       seen: %2$d times\n", entry.getKey(), entry.getValue());
             }
-            valuesAndOccurrences += "-------------       -------------\n";
-
+            if(priceOccurrences.size()>1 && entry.getKey() != priceOccurrences.firstKey()) {
+                valuesAndOccurrences += "-------------       -------------\n";
+            } else if (priceOccurrences.size() == 1) {
+                valuesAndOccurrences += "-------------       -------------\n";
+            }
         }
         valuesAndOccurrences += "\n";
         return valuesAndOccurrences;

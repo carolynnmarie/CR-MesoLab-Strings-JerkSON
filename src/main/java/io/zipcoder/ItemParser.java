@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.LITERAL;
 
 public class ItemParser {
 
@@ -64,7 +62,7 @@ public class ItemParser {
     }
 
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
-        return new ArrayList<String>(Arrays.asList(inputString.split(stringPattern)));
+        return new ArrayList<>(Arrays.asList(inputString.split(stringPattern)));
     }
 
     public String normalizeRawData(String rawData){
@@ -74,11 +72,11 @@ public class ItemParser {
     }
 
     public String convertWeirdCharactersToSemiColon(String rawData) {
-        ArrayList<String> wierdCharacters = new ArrayList<>(Arrays.asList("^", "!", "*", "%"));
+        ArrayList<String> weirdCharacters = new ArrayList<>(Arrays.asList("^", "!", "*", "%"));
         Pattern pattern = Pattern.compile("@");
         Matcher matcher = pattern.matcher(rawData);
         String unWeird = matcher.replaceAll(";");
-        for (String character : wierdCharacters) {
+        for (String character : weirdCharacters) {
             matcher.reset(unWeird);
             matcher.usePattern(Pattern.compile(character, Pattern.LITERAL));
             unWeird = matcher.replaceAll(";");

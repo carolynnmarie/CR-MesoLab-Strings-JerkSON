@@ -73,7 +73,7 @@ public class ListCreationTest {
         LinkedHashMap<Double,Integer> expected = new LinkedHashMap<>();
         expected.put(3.23,2);
         expected.put(2.00,1);
-        LinkedHashMap<Double,Integer> actual = list.valueCount(itemObjects, "milk");
+        TreeMap<Double,Integer> actual = list.valueCount(itemObjects, "milk");
         Assert.assertEquals(expected, actual);
     }
 
