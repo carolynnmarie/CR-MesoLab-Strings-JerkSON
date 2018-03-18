@@ -18,4 +18,8 @@ public class ListEntryPair {
     public Double getPrice() {
         return price;
     }
+
+    public String pairToString(){
+        return name+price;
+    }
 }

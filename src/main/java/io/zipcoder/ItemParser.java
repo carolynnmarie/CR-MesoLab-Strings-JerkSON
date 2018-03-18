@@ -9,11 +9,10 @@ import static java.util.regex.Pattern.LITERAL;
 
 public class ItemParser {
 
-    private int exceptionCounter;
-
+    private static int exceptionCounter;
 
     public ItemParser(){
-        this.exceptionCounter = 0;
+        exceptionCounter = 0;
     }
 
     public int getExceptionCounter(){
@@ -27,67 +26,55 @@ public class ItemParser {
         return response;
     }
 
+    public ArrayList<Item> stringArrayToItemArray(ArrayList<String> rawItems)throws ItemParseException{
+        ArrayList<Item> itemArray = new ArrayList<>();
+        for(String item: rawItems){
+            Item it = parseStringIntoItem(item);
+            if(!it.getName().equals("")) {
+                itemArray.add(it);
+            }
+        }
+        return itemArray;
+    }
+
     public Item parseStringIntoItem(String rawItem) throws ItemParseException{
         String name = "";
         String priceString = "";
         Double price = 0.00;
         String type = "";
         String expiration = "";
-        Pattern pattern = Pattern.compile("(?i)name:(\\w*);price:(\\d*.\\d*\\d*);type:(\\w*);expiration:(\\w*/\\w*/\\w*)");
+        Pattern pattern = Pattern.compile("name:(\\w*);price:(\\d*.\\d*\\d*);type:(\\w*);expiration:(\\w*/\\w*/\\w*)");
         Matcher matcher = pattern.matcher(rawItem);
-        while(matcher.find()) {
-            if ((matcher.group(1)).equals("")) {
+        if(matcher.find()) {
+            try {
+                name = matcher.group(1);
+                priceString = matcher.group(2);
+                price = Double.parseDouble(priceString);
+                type = matcher.group(3);
+                expiration = matcher.group(4);
+                if (name.length() == 0 || priceString.length() == 0 || type.length() == 0 || expiration.length() == 0) {
+                    exceptionCounter++;
+                    throw new ItemParseException();
+                }
+            } catch (ItemParseException e) {
                 exceptionCounter++;
-                throw new ItemParseException();
             }
-            name = matcher.group(1);
-            if (matcher.group(2).equals("")) {
-                exceptionCounter++;
-                throw new ItemParseException();
-            }
-            priceString = matcher.group(2);
-            price = Double.parseDouble(priceString);
-            if (matcher.group(3).equals("")) {
-                exceptionCounter++;
-                throw new ItemParseException();
-            }
-            type = matcher.group(3);
-            if (matcher.group().equals("")) {
-                exceptionCounter++;
-                throw new ItemParseException();
-            }
-            expiration = matcher.group(4);
         }
         return new Item(name, price, type, expiration);
     }
-//    protected PhoneNumber(String phoneNumber) throws InvalidPhoneNumberFormatException {
-//        //validate phone number with format `(###)-###-####`
-//        if (!phoneNumber.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}")) {
-//            throw new InvalidPhoneNumberFormatException();
-//        }
-//        this.phoneNumberString = phoneNumber;
-//    }
-
-//    public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
-//        String stringPattern = "[;]";
-//        ArrayList<String> response = splitStringWithRegexPattern(stringPattern , rawItem);
-//        return response;
-//    }
 
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
         return new ArrayList<String>(Arrays.asList(inputString.split(stringPattern)));
     }
 
-
     public String normalizeRawData(String rawData){
         String normal = convertWeirdCharactersToSemiColon(rawData);
         String normal2 = toLowerCaseString(normal);
         return remove0FromCookie(normal2);
-
     }
 
     public String convertWeirdCharactersToSemiColon(String rawData) {
-        ArrayList<String> wierdCharacters = new ArrayList<>(Arrays.asList("@", "^", "!", "*", "%"));
+        ArrayList<String> wierdCharacters = new ArrayList<>(Arrays.asList("^", "!", "*", "%"));
         Pattern pattern = Pattern.compile("@");
         Matcher matcher = pattern.matcher(rawData);
         String unWeird = matcher.replaceAll(";");

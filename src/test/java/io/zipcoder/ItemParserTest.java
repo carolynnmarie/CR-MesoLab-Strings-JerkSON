@@ -48,10 +48,9 @@ public class ItemParserTest {
         itemParser.parseStringIntoItem(rawBrokenSingleItem);
     }
 
-
     @Test
     public void testNormalizeRawData(){
-        String initial = "naMe:Co0kie;price:3.23;type:Food^expiration:1/11/2016##";
+        String initial = "naMe:Co0kie@price:3.23%type:Food^expiration:1/11/2016##";
         String expected = "name:cookie;price:3.23;type:food;expiration:1/11/2016##";
         String actual = itemParser.normalizeRawData(initial);
         Assert.assertEquals(expected, actual);

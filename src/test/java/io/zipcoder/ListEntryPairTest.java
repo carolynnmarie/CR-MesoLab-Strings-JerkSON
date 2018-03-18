@@ -3,8 +3,6 @@ package io.zipcoder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 public class ListEntryPairTest {
 
     @Test
@@ -17,5 +15,4 @@ public class ListEntryPairTest {
         Assert.assertEquals(expectedName, actualName);
         Assert.assertEquals(expectedPrice, actualPrice);
     }
-
 }

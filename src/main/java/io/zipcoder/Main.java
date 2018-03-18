@@ -2,12 +2,18 @@ package io.zipcoder;
 
 import org.apache.commons.io.IOUtils;
 
+import java.util.ArrayList;
+
 
 public class Main {
+
+    protected ListCreation listCreation = new ListCreation();
+
 
     public String readRawDataToString() throws Exception{
         ClassLoader classLoader = getClass().getClassLoader();
         String result = IOUtils.toString(classLoader.getResourceAsStream("RawData.txt"));
+        result = listCreation.rawStringToFinishedGroceryList(result);
         return result;
     }
 

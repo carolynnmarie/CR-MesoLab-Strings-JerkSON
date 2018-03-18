@@ -26,16 +26,11 @@ public class Item {
         return name;
     }
 
-    public void setName(String name){ this.name = name;}
-
     public Double getPrice() { return price; }
-
-
 
     public String getType() {
         return type;
     }
-
 
     public String getExpiration() {
         return expiration;
