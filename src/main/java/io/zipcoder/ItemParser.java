@@ -40,17 +40,24 @@ public class ItemParser {
     }
 
     public Item parseStringIntoItem(String rawItem) throws ItemParseException{
-        Pattern p = Pattern.compile(":");
+        Pattern p = Pattern.compile("((.*):(.*))+");
+        Matcher matcher = p.matcher(rawItem);
         return null;
     }
 
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
         String stringPattern = "[;|\\^|%|\\*|!|@]";
         return splitStringWithRegexPattern(stringPattern , rawItem);
-
     }
 
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
         return new ArrayList<>(Arrays.asList(inputString.split(stringPattern)));
+    }
+
+    public String toLowerCase(String itemString){
+        Pattern p = Pattern.compile("\\p{Upper}");
+        Matcher matcher = p.matcher(itemString);
+        String one = matcher.replaceAll();
+        return one;
     }
 }
