@@ -13,6 +13,10 @@ public class ItemParser {
         exceptionCounter = 0;
     }
 
+    public static void setExceptionCounter(int exceptionCounter) {
+        ItemParser.exceptionCounter = exceptionCounter;
+    }
+
     public int getExceptionCounter(){
         return exceptionCounter;
     }
