@@ -53,6 +53,4 @@ public class ItemParser {
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
         return new ArrayList<>(Arrays.asList(inputString.split(stringPattern)));
     }
-
-
 }
