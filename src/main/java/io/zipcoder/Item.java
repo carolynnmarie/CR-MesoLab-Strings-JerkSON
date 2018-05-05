@@ -22,6 +22,21 @@ public class Item {
         this.expiration = expiration;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setExpiration(String expiration) {
+        this.expiration = expiration;
+    }
 
     public String getName() {
         return name;
