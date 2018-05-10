@@ -8,26 +8,22 @@ import java.util.regex.Pattern;
 public class ItemParser {
 
     private static int exceptionCounter;
-    private Item item;
+    String rawData;
 
-    public ItemParser(){
-        exceptionCounter = 0;
-        this.item = new Item(null, null, null, null);
-    }
-
-    public static void setExceptionCounter(int exceptionCounter) {
-        ItemParser.exceptionCounter = exceptionCounter;
+    public ItemParser(String rawData){
+        exceptionCounter = exceptionCounter;
+        this.rawData = rawData;
     }
 
     public int getExceptionCounter(){
         return exceptionCounter;
     }
+
     public ArrayList<Item> rawDataToItemArray(String rawData) throws ItemParseException {
-        rawData = toLowerCase(rawData);
+        rawData = toLowerCaseString(rawData);
         rawData = fixCookie(rawData);
         ArrayList<String> rawString = parseRawDataIntoStringArray(rawData);
         return stringArrayToItemArray(rawString);
-
     }
 
     public ArrayList<String> parseRawDataIntoStringArray(String rawData){
@@ -47,7 +43,7 @@ public class ItemParser {
     }
 
     public Item parseStringIntoSingleItem(String rawItem) throws ItemParseException{
-        rawItem = toLowerCase(rawItem);
+        rawItem = toLowerCaseString(rawItem);
         ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
         Item item = new Item(null,null,null,null);
         try{
@@ -68,7 +64,6 @@ public class ItemParser {
         } catch(ItemParseException e){
             exceptionCounter++;
         }
-
         return item;
     }
 
@@ -81,7 +76,7 @@ public class ItemParser {
         return new ArrayList<>(Arrays.asList(inputString.split(stringPattern)));
     }
 
-    public String toLowerCase(String itemString){
+    public String toLowerCaseString(String itemString){
         ArrayList<String> upperCase = new ArrayList<>(Arrays.asList("A","B","C","D","E","F","G","H","I","J",
                 "K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"));
         ArrayList<String> lowerCase = new ArrayList<>(Arrays.asList("a","b","c","d","e","f","g","h","i","j",
@@ -101,6 +96,15 @@ public class ItemParser {
         Pattern pattern = Pattern.compile("c..kie");
         Matcher matcher = pattern.matcher(raw);
         return matcher.replaceAll("cookie");
-
     }
+
+    public String itemArrayToString(ArrayList<Item> array){
+        StringBuilder itemString = new StringBuilder();
+        for(Item item: array){
+            itemString.append(item.toString());
+        }
+        return itemString.toString();
+    }
+
+
 }

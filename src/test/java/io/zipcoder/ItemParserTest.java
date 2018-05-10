@@ -26,6 +26,13 @@ public class ItemParserTest {
         itemParser = new ItemParser();
     }
 
+    @Test
+    public void rawDataToItemArrayTest() throws ItemParseException {
+        String expected = "name: milk, price: 3.23, type: food, expiration: 1/25/2016";
+        ArrayList<Item> items = itemParser.rawDataToItemArray(rawSingleItem);
+        String actual = itemParser.itemArrayToString(items);
+        Assert.assertEquals(expected, actual);
+    }
 
     @Test
     public void parseRawDataIntoStringArrayTest(){
@@ -50,27 +57,21 @@ public class ItemParserTest {
         Assert.assertEquals(e, a);
     }
 
-//
-//    @Test
-//    public void testToLowerCase(){
-//        String expected = itemParser.toLowerCase(rawSingleItem);
-//        String actual = itemParser.toLowerCaseString(rawSingleItem);
-//        Assert.assertEquals(expected, actual);
-//    }
-//
-//
-//    @Test
-//    public void testRemove0FromCookie(){
-//        String initial = "c00kie";
-//        String expected = "cookie";
-//        String actual = itemParser.remove0FromCookie(initial);
-//        Assert.assertEquals(expected, actual);
-//    }
 
     @Test
-    public void testToLowerCase(){
+    public void testToLowerCaseString(){
+        String expected = itemParser.toLowerCaseString(rawSingleItem);
+        String actual = "name:milk;price:3.23;type:food;expiration:1/25/2016##";
+        Assert.assertEquals(expected, actual);
+    }
 
-        System.out.println(itemParser.toLowerCase(rawSingleItem));
+
+    @Test
+    public void testFixCookie(){
+        String initial = "c00kie";
+        String expected = "cookie";
+        String actual = itemParser.fixCookie(initial);
+        Assert.assertEquals(expected, actual);
     }
 
 }
