@@ -10,7 +10,7 @@ public class ItemParser {
     private static int exceptionCounter;
     String rawData;
 
-    public ItemParser(String rawData){
+    public ItemParser(){
         exceptionCounter = exceptionCounter;
         this.rawData = rawData;
     }
@@ -52,7 +52,7 @@ public class ItemParser {
             if (array.length == 1) {
                 throw new ItemParseException();
             } else if (array[0].matches("name")) {
-                item.setName(array[1]);
+                item.setName(firstLetterToUpper(array[1]));
             } else if (array[0].matches("price")) {
                 item.setPrice(Double.parseDouble(array[1]));
             } else if (array[0].matches("type")) {
@@ -69,7 +69,7 @@ public class ItemParser {
 
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
         String stringPattern = "[;^%*!@]";
-        return splitStringWithRegexPattern(stringPattern , rawItem);
+        return splitStringWithRegexPattern(stringPattern ,rawItem);
     }
 
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
@@ -91,6 +91,37 @@ public class ItemParser {
         }
         return lower;
     }
+
+    public String firstLetterToUpper(String name){
+        String uCName = "";
+        Pattern p = Pattern.compile("a");
+        Matcher m = p.matcher(name.substring(0,1));
+        if(m.matches()) {
+            m.reset(name);
+            uCName = m.replaceFirst("A");
+            m.reset(name.substring(0,1));
+        }
+        m.usePattern(Pattern.compile("b"));
+        if(m.matches()) {
+            m.reset((name));
+            uCName = m.replaceFirst("B");
+            m.reset(name.substring(0,1));
+        }
+        m.usePattern(Pattern.compile("c"));
+        if(m.matches()) {
+            m.reset((name));
+            uCName = m.replaceFirst("C");
+            m.reset(name.substring(0,1));
+        }
+        m.usePattern(Pattern.compile("m"));
+        if(m.matches()) {
+            m.reset((name));
+            uCName = m.replaceFirst("M");
+        }
+        return uCName;
+    }
+
+
 
     public String fixCookie(String raw){
         Pattern pattern = Pattern.compile("c..kie");

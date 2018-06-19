@@ -10,11 +10,11 @@ import static org.junit.Assert.*;
 
 public class ItemParserTest {
 
-    private String rawSingleItem =    "naMe:Milk;price:3.23;type:Food;expiration:1/25/2016##";
+    private String rawSingleItem = "naMe:Milk;price:3.23;type:Food;expiration:1/25/2016##";
 
     private String rawSingleItemIrregularSeperatorSample = "naMe:MiLK;price:3.23;type:Food^expiration:1/11/2016##";
 
-    private String rawBrokenSingleItem =    "naMe:Milk;price:3.23;type:;expiration:1/25/2016##";
+    private String rawBrokenSingleItem = "naMe:Milk;price:3.23;type:;expiration:1/25/2016##";
 
     private String rawMultipleItems = "naMe:Milk;price:3.23;type:Food;expiration:1/25/2016##"
                                       +"naME:BreaD;price:1.23;type:Food;expiration:1/02/2016##"
@@ -28,8 +28,26 @@ public class ItemParserTest {
 
     @Test
     public void rawDataToItemArrayTest() throws ItemParseException {
-        String expected = "name: milk, price: 3.23, type: food, expiration: 1/25/2016";
+        String expected = "name: milk, price: 3.23, type: food, expiration: 1/25/2016\n";
         ArrayList<Item> items = itemParser.rawDataToItemArray(rawSingleItem);
+        String actual = itemParser.itemArrayToString(items);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void rawIrregularItemToArray() throws ItemParseException{
+        String expected = "name: milk, price: 3.23, type: food, expiration: 1/11/2016\n";
+        ArrayList<Item> items = itemParser.rawDataToItemArray(rawSingleItemIrregularSeperatorSample);
+        String actual = itemParser.itemArrayToString(items);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void multipleRawItemsToItemArrayTest() throws ItemParseException {
+        String expected = "name: milk, price: 3.23, type: food, expiration: 1/25/2016\n" +
+                "name: bread, price: 1.23, type: food, expiration: 1/02/2016\n" +
+                "name: bread, price: 1.23, type: food, expiration: 2/25/2016\n";
+        ArrayList<Item> items = itemParser.rawDataToItemArray(rawMultipleItems);
         String actual = itemParser.itemArrayToString(items);
         Assert.assertEquals(expected, actual);
     }
@@ -72,6 +90,14 @@ public class ItemParserTest {
         String expected = "cookie";
         String actual = itemParser.fixCookie(initial);
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testFirstLetterToUpper(){
+        String initial = "milk";
+        String expected = "Milk";
+        String actual = itemParser.firstLetterToUpper(initial);
+        Assert.assertEquals(expected,actual);
     }
 
 }
