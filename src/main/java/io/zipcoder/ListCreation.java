@@ -39,15 +39,15 @@ public class ListCreation {
     public ArrayList<Item> itemList() throws ItemParseException {
         return itemParser.rawDataToItemArray(rawString);
     }
-//
-//    public
-//
-//
-//    public String stringOutput(String rawData)throws ItemParseException{
-//        Pattern p = Pattern.compile()
-//
-//        return null;
-//    }
+
+    public String createGroceryList(ArrayList<Item> itemList){
+        String list = "";
+
+        for(Item item: itemList){
+
+            list = String.format()
+        }
+    }
 }
 
 
