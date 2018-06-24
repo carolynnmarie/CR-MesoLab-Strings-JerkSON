@@ -7,20 +7,19 @@ import java.util.ArrayList;
 
 public class Main {
 
-    public String readRawDataToString() throws Exception{
+    public ArrayList<Item> readRawDataToItemArray() throws Exception{
         ClassLoader classLoader = getClass().getClassLoader();
         String result = IOUtils.toString(classLoader.getResourceAsStream("RawData.txt"));
         ItemParser parser = new ItemParser();
         ArrayList<Item> items = parser.rawDataToItemArray(result);
-        String list = parser.itemArrayToString(items);
-        return list;
+        return items;
     }
 
     public static void main(String[] args) throws Exception{
-        String output = (new Main()).readRawDataToString();
         ItemParser parse = new ItemParser();
-        System.out.println(output);
-        System.out.println(parse.getExceptionCounter());
-        // TODO: parse the data in output into items, and display to console.
+        ListCreation create = new ListCreation();
+        ArrayList<Item> output = (new Main()).readRawDataToItemArray();
+        String out = create.createGroceryList(output);
+        System.out.println(out);
     }
 }

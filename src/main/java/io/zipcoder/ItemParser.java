@@ -93,6 +93,8 @@ public class ItemParser {
     }
 
     public String firstLetterToUpper(String name){
+        ArrayList<String> lower = new ArrayList<>(Arrays.asList("b","c","m"));
+        ArrayList<String> upper = new ArrayList<>(Arrays.asList("B","C","M"));
         String uCName = "";
         Pattern p = Pattern.compile("a");
         Matcher m = p.matcher(name.substring(0,1));
@@ -101,22 +103,13 @@ public class ItemParser {
             uCName = m.replaceFirst("A");
             m.reset(name.substring(0,1));
         }
-        m.usePattern(Pattern.compile("b"));
-        if(m.matches()) {
-            m.reset((name));
-            uCName = m.replaceFirst("B");
-            m.reset(name.substring(0,1));
-        }
-        m.usePattern(Pattern.compile("c"));
-        if(m.matches()) {
-            m.reset((name));
-            uCName = m.replaceFirst("C");
-            m.reset(name.substring(0,1));
-        }
-        m.usePattern(Pattern.compile("m"));
-        if(m.matches()) {
-            m.reset((name));
-            uCName = m.replaceFirst("M");
+        for(int i = 0; i<lower.size(); i++){
+            m.usePattern(Pattern.compile(lower.get(i)));
+            if(m.matches()) {
+                m.reset((name));
+                uCName = m.replaceFirst(upper.get(i));
+                m.reset(name.substring(0,1));
+            }
         }
         return uCName;
     }

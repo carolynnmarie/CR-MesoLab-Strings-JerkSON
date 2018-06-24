@@ -6,17 +6,39 @@ import java.util.regex.Pattern;
 
 public class ListCreation {
 
-    String rawString;
-    String finishedList;
     ItemParser itemParser;
 
-    public ListCreation(String rawString) {
-        this.rawString = rawString;
-        this.finishedList = "";
+    public ListCreation() {
         this.itemParser = new ItemParser();
     }
 
-    public Integer countDuplicatesName(ArrayList<Item> list, Item item) {
+    public String createGroceryList(ArrayList<Item> items) throws ItemParseException {
+        String list = "";
+        LinkedHashMap<String, Integer> names = nameList(items);
+        LinkedHashMap<Double, Integer> prices = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : names.entrySet()) {
+            for (int i = 0; i < items.size(); i++) {
+                if (entry.getKey().equals(items.get(i).getName())) {
+                    prices = priceList(items, entry.getKey());
+                }
+            }
+            list += String.format("Name: %7s       seen: %1d times\n=============       =============\n",
+                    entry.getKey(), entry.getValue());
+            list += printPrices(prices);
+        }
+        list += String.format("\nErrors              seen: %1d times\n", itemParser.getExceptionCounter());
+        return list;
+    }
+
+    public LinkedHashMap<String, Integer> nameList(ArrayList<Item> items) {
+        LinkedHashMap<String, Integer> itemNames = new LinkedHashMap<>();
+        for (Item item : items) {
+            itemNames.put(item.getName(), countDuplicatesName(items, item));
+        }
+        return itemNames;
+    }
+
+    private Integer countDuplicatesName(ArrayList<Item> list, Item item) {
         Integer count = 0;
         for (Item id : list) {
             if (id.getName().equalsIgnoreCase(item.getName())) {
@@ -26,28 +48,42 @@ public class ListCreation {
         return count;
     }
 
-    public Integer countDuplicatesPrice(ArrayList<Item> list, Item item) {
+    public LinkedHashMap<Double, Integer> priceList(ArrayList<Item> items, String name) {
+        LinkedHashMap<Double, Integer> prices = new LinkedHashMap<>();
+        for (Item item : items) {
+            if (item.getName().equals(name)) {
+                prices.put(item.getPrice(), countDuplicatesPrice(items, item));
+            }
+        }
+        return prices;
+    }
+
+    private Integer countDuplicatesPrice(ArrayList<Item> list, Item id) {
         Integer count = 0;
-        for (Item id : list) {
-            if (id.getPrice().equals(item.getPrice())) {
-                count++;
+        for (Item item : list) {
+            if(item.getName().equals(id.getName())){
+                if (item.getPrice().equals(id.getPrice())) {
+                    count++;
+                }
             }
         }
         return count;
     }
 
-    public ArrayList<Item> itemList() throws ItemParseException {
-        return itemParser.rawDataToItemArray(rawString);
-    }
-
-    public String createGroceryList(ArrayList<Item> itemList){
+    private String printPrices(LinkedHashMap<Double, Integer> prices){
         String list = "";
-
-        for(Item item: itemList){
-
-            list = String.format()
+        for (Map.Entry<Double, Integer> priceEntry : prices.entrySet()) {
+            if (priceEntry.getValue() > 1) {
+                list += String.format("Price:   %3.2f       seen: %1d times\n-------------       -------------\n",
+                        priceEntry.getKey(), priceEntry.getValue());
+            } else {
+                list += String.format("Price:   %3.2f       seen: %1d time\n-------------       -------------\n",
+                        priceEntry.getKey(), priceEntry.getValue());
+            }
         }
+        return list;
     }
+
 }
 
 
