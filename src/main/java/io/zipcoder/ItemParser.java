@@ -115,7 +115,6 @@ public class ItemParser {
     }
 
 
-
     public String fixCookie(String raw){
         Pattern pattern = Pattern.compile("c..kie");
         Matcher matcher = pattern.matcher(raw);
