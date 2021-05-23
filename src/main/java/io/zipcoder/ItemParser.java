@@ -77,10 +77,12 @@ public class ItemParser {
     }
 
     public String toLowerCaseString(String itemString){
-        ArrayList<String> upperCase = new ArrayList<>(Arrays.asList("A","B","C","D","E","F","G","H","I","J",
-                "K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"));
+        ArrayList<String> upperCase = new ArrayList<>();
         ArrayList<String> lowerCase = new ArrayList<>(Arrays.asList("a","b","c","d","e","f","g","h","i","j",
                 "k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"));
+        for(String x: lowerCase){
+            upperCase.add(x.toUpperCase());
+        }
         Pattern pattern = Pattern.compile(upperCase.get(0));
         Matcher matcher = pattern.matcher(itemString);
         String lower = matcher.replaceAll(lowerCase.get(0));

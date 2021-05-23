@@ -13,7 +13,7 @@ public class ListCreation {
     }
 
     public String createGroceryList(ArrayList<Item> items) throws ItemParseException {
-        String list = "";
+        StringBuilder builder = new StringBuilder();
         LinkedHashMap<String, Integer> names = nameList(items);
         LinkedHashMap<Double, Integer> prices = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : names.entrySet()) {
@@ -22,12 +22,13 @@ public class ListCreation {
                     prices = priceList(items, entry.getKey());
                 }
             }
-            list += String.format("Name: %7s       seen: %1d times\n=============       =============\n",
-                    entry.getKey(), entry.getValue());
-            list += printPrices(prices);
+            builder.append(String.format("Name: %7s       seen: %1d times\n=============       =============\n",
+                    entry.getKey(), entry.getValue()))
+                    .append(printPrices(prices));
+
         }
-        list += String.format("\nErrors              seen: %1d times\n", itemParser.getExceptionCounter());
-        return list;
+        builder.append(String.format("\nErrors              seen: %1d times\n", itemParser.getExceptionCounter()));
+        return builder.toString();
     }
 
     public LinkedHashMap<String, Integer> nameList(ArrayList<Item> items) {
@@ -71,17 +72,17 @@ public class ListCreation {
     }
 
     private String printPrices(LinkedHashMap<Double, Integer> prices){
-        String list = "";
+        StringBuilder builder = new StringBuilder();
         for (Map.Entry<Double, Integer> priceEntry : prices.entrySet()) {
             if (priceEntry.getValue() > 1) {
-                list += String.format("Price:   %3.2f       seen: %1d times\n-------------       -------------\n",
-                        priceEntry.getKey(), priceEntry.getValue());
+                builder.append(String.format("Price:   %3.2f       seen: %1d times\n-------------       -------------\n",
+                        priceEntry.getKey(), priceEntry.getValue()));
             } else {
-                list += String.format("Price:   %3.2f       seen: %1d time\n-------------       -------------\n",
-                        priceEntry.getKey(), priceEntry.getValue());
+                builder.append(String.format("Price:   %3.2f       seen: %1d time\n-------------       -------------\n",
+                        priceEntry.getKey(), priceEntry.getValue()));
             }
         }
-        return list;
+        return builder.toString();
     }
 
 }
